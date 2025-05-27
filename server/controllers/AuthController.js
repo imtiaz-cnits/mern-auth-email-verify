@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserModel from "../models/UserModel.js";
+import transporter from "../config/EmailHelper.js";
 
 // Register function to create new users
 export const register = async (req, res) => {
@@ -30,6 +31,17 @@ export const register = async (req, res) => {
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'strict',
             maxAge: 1 * 24 * 60 * 60 * 1000 // 1 day
         });
+
+        // Welcome email sending
+        const mailOptions = {
+            from: process.env.SENDER_MAIL,
+            to: email,
+            subject: 'Welcome to CodeNext IT',
+            text: `Hello ${name},\n\nThank you for registering with us! We're excited to have you on board.
+            \n\nBest regards,\nCodeNext IT Team`
+        }
+        await transporter.sendMail(mailOptions);
+
         res.status(201).json({ success: true, message: 'User registered successfully' });
     }
 

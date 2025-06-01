@@ -1,5 +1,6 @@
 import express from "express";
-import {login, logout, register} from "../controllers/AuthController.js";
+import {login, logout, register, sendVerificationOTP, verifyEmail} from "../controllers/AuthController.js";
+import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 
 const apiRouter = express.Router();
 
@@ -7,5 +8,7 @@ const apiRouter = express.Router();
 apiRouter.post("/register", register);
 apiRouter.post("/login", login);
 apiRouter.post("/logout", logout);
+apiRouter.post("/send-verification-otp", AuthMiddleware, sendVerificationOTP);
+apiRouter.post("/verify-account", AuthMiddleware, verifyEmail);
 
 export default apiRouter;

@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import UserModel from "../models/UserModel.js";
 import transporter from "../config/EmailHelper.js";
 
+// YT Video Last Watched - 01:55:04
+
 // Register function to create new users
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -42,7 +44,7 @@ export const register = async (req, res) => {
         }
         await transporter.sendMail(mailOptions);
 
-        res.status(201).json({ success: true, message: 'User registered successfully' });
+        res.status(201).json({ success: true, message: 'User registered successfully', userId: user._id });
     }
 
     catch (error) {
@@ -104,5 +106,76 @@ export const logout = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// Function to send verification OTP to the user
+export const sendVerificationOTP = async (req, res) => {
+    try {
+        const {userId} = req.body; // Assuming userId is passed in the request body
+        const user = await UserModel.findById(userId); // Find user by ID
+
+        if(user.isAccountVerified){
+            return res.status(400).json({ success: false, message: 'Account already verified' });
+        }
+        const otp = String(Math.floor(100000 + Math.random() * 900000)); // Generate a 6-digit OTP
+
+        user.verifyOtp = otp; // Generate a 6-digit OTP
+        user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000; // OTP valid for 24 hours
+
+        await user.save(); // Save OTP and expiration time to the user document
+
+        // Send OTP via email
+        const mailOptions = {
+            from: process.env.SENDER_MAIL,
+            to: user.email,
+            subject: 'Account Verification OTP',
+            text: `Your OTP for account verification is ${otp}. It is valid for 24 hours.`
+        };
+        await transporter.sendMail(mailOptions); // Send the email
+
+        return res.status(200).json({ success: true, message: 'Verification OTP sent successfully' });
+    }
+    catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// Function to verify the OTP sent to the user
+export const verifyEmail = async (req, res) => {
+    const {userId, otp} = req.body; // Assuming userId and otp are passed in the request body
+
+    if(!userId || !otp){
+        return res.status(400).json({ success: false, message: 'Missing Details!' });
+    }
+
+    try {
+        const user = await UserModel.findById(userId); // Find user by ID
+
+        // Check if user exists
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Check if OTP is correct
+        if (user.verifyOtp === '' || user.verifyOtp !== otp) {
+            return res.status(400).json({ success: false, message: 'Invalid OTP' });
+        }
+
+        // Check if OTP has expired
+        if (user.verifyOtpExpireAt < Date.now()) {
+            return res.status(400).json({ success: false, message: 'OTP expired' });
+        }
+
+        user.isAccountVerified = true; // Mark the account as verified
+        user.verifyOtp = ''; // Clear the OTP
+        user.verifyOtpExpireAt = 0; // Clear the OTP expiration time
+
+        await user.save(); // Save the updated user document
+
+        return res.status(200).json({ success: true, message: 'Account verified successfully' });
+    }
+    catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
     }
 }

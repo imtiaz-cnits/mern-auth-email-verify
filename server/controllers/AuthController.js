@@ -53,6 +53,8 @@ export const register = async (req, res) => {
     }
 }
 
+
+
 // Login function to authenticate users
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -92,6 +94,8 @@ export const login = async (req, res) => {
     }
 }
 
+
+
 // Logout function to clear user session
 export const logout = async (req, res) => {
     try {
@@ -109,48 +113,57 @@ export const logout = async (req, res) => {
     }
 }
 
+
+
 // Function to send verification OTP to the user
 export const sendVerificationOTP = async (req, res) => {
     try {
-        const {userId} = req.body; // Assuming userId is passed in the request body
-        const user = await UserModel.findById(userId); // Find user by ID
+        const userId = req.userId; // Changed from req.body.userId to req.userId
+        const user = await UserModel.findById(userId);
 
-        if(user.isAccountVerified){
-            return res.status(400).json({ success: false, message: 'Account already verified' });
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
-        const otp = String(Math.floor(100000 + Math.random() * 900000)); // Generate a 6-digit OTP
 
-        user.verifyOtp = otp; // Generate a 6-digit OTP
-        user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000; // OTP valid for 24 hours
+        // Generate OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        await user.save(); // Save OTP and expiration time to the user document
+        // Set OTP and expiration time
+        user.verifyOtp = otp;
+        user.verifyOtpExpireAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+        await user.save();
 
         // Send OTP via email
         const mailOptions = {
             from: process.env.SENDER_MAIL,
             to: user.email,
-            subject: 'Account Verification OTP',
-            text: `Your OTP for account verification is ${otp}. It is valid for 24 hours.`
-        };
-        await transporter.sendMail(mailOptions); // Send the email
+            subject: 'Your OTP Code',
+            text: `Hello ${user.name},\n\nYour OTP code is ${otp}. It will expire in 10 minutes.\n\nBest regards,\nCodeNext IT Team`
+        }
+        await transporter.sendMail(mailOptions);
 
-        return res.status(200).json({ success: true, message: 'Verification OTP sent successfully' });
+        res.status(200).json({ success: true, message: 'OTP sent successfully' });
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
+
+
 // Function to verify the OTP sent to the user
 export const verifyEmail = async (req, res) => {
-    const {userId, otp} = req.body; // Assuming userId and otp are passed in the request body
+    const {otp} = req.body;
+    const userId = req.userId;
 
-    if(!userId || !otp){
-        return res.status(400).json({ success: false, message: 'Missing Details!' });
+    if(!otp){
+        return res.status(400).json({ success: false, message: 'OTP is required!' });
     }
 
     try {
-        const user = await UserModel.findById(userId); // Find user by ID
+        const user = await UserModel.findById(userId);
 
         // Check if user exists
         if (!user) {
@@ -171,7 +184,7 @@ export const verifyEmail = async (req, res) => {
         user.verifyOtp = ''; // Clear the OTP
         user.verifyOtpExpireAt = 0; // Clear the OTP expiration time
 
-        await user.save(); // Save the updated user document
+        await user.save();
 
         return res.status(200).json({ success: true, message: 'Account verified successfully' });
     }

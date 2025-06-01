@@ -12,9 +12,9 @@ const authMiddleware = async (req, res, next) => {
     try {
         const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Attach user ID to request body for further processing
+        // Attach user ID to request object
         if(tokenDecoded.id){
-            req.body.userId = tokenDecoded.id;
+            req.userId = tokenDecoded.id;  // Changed from req.body.userId to req.userId
         }
         else{
             return res.status(401).json({ success: false, message: 'Invalid token' });
@@ -29,3 +29,4 @@ const authMiddleware = async (req, res, next) => {
 }
 
 export default authMiddleware;
+

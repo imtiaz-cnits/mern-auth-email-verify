@@ -1,5 +1,12 @@
 import express from "express";
-import {login, logout, register, sendVerificationOTP, verifyEmail} from "../controllers/AuthController.js";
+import {
+    // isAuthenticated,
+    login,
+    logout,
+    register,
+    sendVerificationOTP,
+    verifyEmail
+} from "../controllers/AuthController.js";
 import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 
 const apiRouter = express.Router();

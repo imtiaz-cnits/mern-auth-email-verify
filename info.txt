@@ -1,0 +1,6 @@
+Login Details for Postman
+
+{
+"email": "ia64744@gmail.com",
+"password": "Imtiaz1234"
+}

@@ -8,8 +8,18 @@ import Router from './routes/api.js';
 
 const app = express();
 
-// ✅ Middleware to parse JSON
+// Configure CORS before other middleware
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Middleware setup
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const port = process.env.PORT || 6000;
 
@@ -17,10 +27,6 @@ const port = process.env.PORT || 6000;
 connectDB()
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
-
-app.use(express());
-app.use(cookieParser());
-app.use(cors({credentials: true}));
 
 // API Endpoints
 app.get('/', (req, res) => res.send('API is Working!'));

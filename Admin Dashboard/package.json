@@ -1,0 +1,29 @@
+{
+  "name": "horizon-dashboard-tailwind",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imtiaz-cnits/horizon-dashboard-tailwind.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imtiaz-cnits/horizon-dashboard-tailwind/issues"
+  },
+  "homepage": "https://github.com/imtiaz-cnits/horizon-dashboard-tailwind#readme",
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.7",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.8"
+  }
+}

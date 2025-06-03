@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Modal with Animations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Modal animations */
+      .modal-overlay {
+        opacity: 0;
+        transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .modal-overlay.active {
+        opacity: 1;
+      }
+      .modal-container {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .modal-container.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      /* Searchable select styles */
+      .searchable-select {
+        position: relative;
+      }
+      .searchable-select input {
+        width: 100%;
+      }
+      .searchable-options {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 50;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: none;
+        margin-top: 0.25rem;
+      }
+      .searchable-options.show {
+        display: block;
+        animation: fadeIn 150ms ease-out;
+      }
+      .searchable-option {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background-color 150ms;
+      }
+      .searchable-option:hover {
+        background-color: #f3f4f6;
+      }
+      .searchable-option.selected {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      /* Dropdown icon rotation */
+      .dropdown-icon {
+        transition: transform 0.3s ease-in-out;
+        transform-origin: center;
+      }
+      .dropdown-icon.rotate {
+        transform: scaleY(-1);
+        transform-origin: center;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 p-8 font-sans">
+    <div
+      class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden"
+    >
+      <div class="p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">
+          Status Table with Actions
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Title
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                >
+                  Sample Item
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-green-500 mr-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                      >Approved</span
+                    >
+                  </div>
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
+                  <div class="flex justify-end space-x-2">
+                    <button
+                      onclick="openEditModal()"
+                      class="text-yellow-500 hover:text-yellow-700 p-1 rounded-full hover:bg-yellow-50 transition-colors duration-200"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                >
+                  Another Item
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-red-500 mr-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                      >Rejected</span
+                    >
+                  </div>
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
+                  <div class="flex justify-end space-x-2">
+                    <button
+                      onclick="openEditModal()"
+                      class="text-yellow-500 hover:text-yellow-700 p-1 rounded-full hover:bg-yellow-50 transition-colors duration-200"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="editModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden"
+    >
+      <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50"></div>
+
+      <div
+        class="modal-container relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col"
+      >
+        <div
+          class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+        >
+          <h3 class="text-lg font-semibold text-gray-900">Edit Item Details</h3>
+          <button
+            onclick="closeModal()"
+            class="text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="overflow-y-auto px-6 py-4">
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Heading</label
+              >
+              <input
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Name</label
+              >
+              <input
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Date</label
+              >
+              <input
+                type="date"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              />
+            </div>
+
+             <div class="searchable-select">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Filter (Searchable 3 - Limited Options)</label
+              >
+              <select id="realSelect3" class="hidden">
+                <option value="">Select an option</option>
+                <option value="Opt1">Option 1</option>
+                <option value="Opt2">Option 2</option>
+                <option value="Opt3">Option 3</option>
+              </select>
+              <div class="relative">
+                <input
+                  type="text"
+                  class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 searchable-select-input"
+                  placeholder="Search..."
+                  data-target-select="#realSelect3"
+                />
+                <span
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer dropdown-icon searchable-select-icon"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="searchable-options searchable-select-options"></div>
+            </div>
+
+            <div class="searchable-select">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Filter (Searchable 1)</label
+              >
+              <select id="realSelect1" class="hidden">
+                <option value="">Select an option</option>
+                <option value="AL">Alabama</option>
+                <option value="WY">Wyoming</option>
+                <option value="NY">New York</option>
+              </select>
+              <div class="relative">
+                <input
+                  type="text"
+                  class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 searchable-select-input"
+                  placeholder="Search..."
+                  data-target-select="#realSelect1"
+                />
+                <span
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer dropdown-icon searchable-select-icon"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="searchable-options searchable-select-options"></div>
+            </div>
+           
+          </div>
+        </div>
+
+        <div
+          class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3"
+        >
+          <button
+            onclick="closeModal()"
+            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Modal state and elements
+      const modalEdit = document.getElementById("editModal");
+      const modalOverlay = modalEdit.querySelector(".modal-overlay");
+      const modalContainer = modalEdit.querySelector(".modal-container");
+      let modalOpen = false;
+
+      // Modal functions with enhanced animations
+      function openEditModal() {
+        modalEdit.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+
+        // Trigger reflow to enable animations
+        void modalEdit.offsetHeight; // This forces a reflow
+
+        // Activate animations
+        modalOverlay.classList.add("active");
+        modalContainer.classList.add("active");
+
+        modalOpen = true;
+      }
+
+      function closeModal() {
+        // Start closing animations
+        modalOverlay.classList.remove("active");
+        modalContainer.classList.remove("active");
+
+        // Wait for animation to complete before hiding
+        setTimeout(() => {
+          modalEdit.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+          modalOpen = false;
+        }, 300); // Match this with CSS transition duration
+      }
+
+      // Close modal when clicking outside or pressing Escape
+      modalOverlay.addEventListener("click", closeModal);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && modalOpen) {
+          closeModal();
+        }
+      });
+
+      // Searchable select functionality - encapsulated for reusability
+      function initializeSearchableSelect(selectContainer) {
+        // Find elements specific to this searchable select instance
+        const realSelect = selectContainer.querySelector("select");
+        const searchInput = selectContainer.querySelector(
+          ".searchable-select-input"
+        );
+        const searchOptions = selectContainer.querySelector(
+          ".searchable-select-options"
+        );
+        const dropdownIcon = selectContainer.querySelector(
+          ".searchable-select-icon"
+        );
+
+        // Function to populate the custom options div from the hidden select
+        function initOptions() {
+          searchOptions.innerHTML = ""; // Clear existing options
+
+          // Add a default "Select an option" if not already present in the real select
+          // This ensures the custom input starts empty and the user can select nothing
+          if (!realSelect.querySelector('option[value=""]')) {
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Select an option";
+            realSelect.prepend(defaultOption);
+          }
+          realSelect.value = ""; // Ensure the real select is reset
+          searchInput.value = ""; // Ensure the visible input is empty
+
+          // Create and append custom option divs for each option in the real select
+          Array.from(realSelect.options).forEach((option) => {
+            // Skip the empty default option when creating the display list
+            if (option.value === "") {
+              return;
+            }
+
+            const div = document.createElement("div");
+            div.className = "searchable-option";
+            div.textContent = option.text;
+            div.dataset.value = option.value; // Store the actual value
+
+            // Add click listener to each custom option
+            div.addEventListener("click", () => {
+              realSelect.value = option.value; // Update the hidden select's value
+              searchInput.value = option.text; // Update the displayed input text
+
+              // Remove 'selected' class from all options in this specific searchable select
+              selectContainer
+                .querySelectorAll(".searchable-option")
+                .forEach((el) => el.classList.remove("selected"));
+              div.classList.add("selected"); // Add 'selected' to the clicked option
+
+              searchOptions.classList.remove("show"); // Hide options
+              dropdownIcon.classList.remove("rotate"); // Reset icon rotation
+            });
+            searchOptions.appendChild(div);
+          });
+        }
+
+        // Initialize options when the component is set up
+        initOptions();
+
+        // New logic to handle search input based on option count
+        const nonDefaultOptions = Array.from(realSelect.options).filter(
+          (option) => option.value !== ""
+        );
+
+        if (nonDefaultOptions.length <= 3) {
+          // Make input read-only (can't type) but clickable
+          searchInput.setAttribute("readonly", "true");
+          // Remove input event listener to prevent filtering when read-only
+          searchInput.removeEventListener("input", filterOptions);
+          // Adjust styling to indicate read-only state
+          searchInput.classList.add("bg-gray-100", "cursor-pointer");
+          searchInput.classList.remove("cursor-text"); // Ensure it looks clickable
+          searchOptions.style.maxHeight = "none"; // Disable scroll for fewer options
+          searchOptions.style.overflowY = "hidden"; // Hide scrollbar
+          searchInput.placeholder = "Select an option"; // More appropriate placeholder
+        } else {
+          // Enable search input
+          searchInput.removeAttribute("readonly");
+          // Add input event listener back
+          searchInput.addEventListener("input", filterOptions);
+          // Remove read-only styling
+          searchInput.classList.remove("bg-gray-100", "cursor-pointer");
+          searchInput.classList.add("cursor-text"); // Ensure it looks like a text input
+          searchOptions.style.maxHeight = "200px"; // Re-enable scroll
+          searchOptions.style.overflowY = "auto"; // Re-enable scrollbar
+          searchInput.placeholder = "Search...";
+        }
+
+        // Toggles the visibility of options and rotates the dropdown icon
+        function toggleDropdown() {
+          const isShowing = searchOptions.classList.toggle("show");
+          if (isShowing) {
+            filterOptions(); // Show all options (or filtered based on current input) when opening
+            dropdownIcon.classList.add("rotate");
+          } else {
+            dropdownIcon.classList.remove("rotate");
+          }
+        }
+
+        // Event listeners for opening/closing dropdown
+        // The click event listener on searchInput will still work for opening the dropdown
+        searchInput.addEventListener("click", toggleDropdown);
+        dropdownIcon.addEventListener("click", toggleDropdown);
+
+        // Filters the custom options based on the search input (only active if not read-only)
+        function filterOptions() {
+          if (searchInput.hasAttribute("readonly")) {
+            return; // Do not filter if input is read-only
+          }
+          const searchTerm = searchInput.value.toLowerCase();
+          const options = selectContainer.querySelectorAll(".searchable-option");
+
+          options.forEach((option) => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+              option.style.display = "block";
+            } else {
+              option.style.display = "none";
+            }
+          });
+        }
+
+        // Close dropdown when clicking outside of the entire searchable select component
+        document.addEventListener("click", function (e) {
+          if (
+            !selectContainer.contains(e.target) && // If click is outside the selectContainer
+            searchOptions.classList.contains("show") // And the options are currently visible
+          ) {
+            searchOptions.classList.remove("show");
+            dropdownIcon.classList.remove("rotate");
+          }
+        });
+      }
+
+      // Initialize all searchable select instances on the page when the DOM is ready
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .querySelectorAll(".searchable-select")
+          .forEach(initializeSearchableSelect);
+      });
+    </script>
+  </body>
+</html>

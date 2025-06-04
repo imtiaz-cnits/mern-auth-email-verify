@@ -1,31 +1,26 @@
 import React from 'react';
-import useAdminScripts from '../../hooks/useAdminScripts';
 
 const Navbar = () => {
-    useAdminScripts();
-
     return (
-        <div>
-            <nav
-                className="navbar sticky top-0 bg-[var(--adm-secondary)] dark:!bg-[var(--adm-dark-1)] py-[10px] lg:px-[20px] px-[10px] shadow-sm flex items-center justify-between"
-            >
+        <div className="main bg-[var(--secondary-color)] dark:!bg-[var(--dark-bg)] min-h-screen">
+            <nav className="navbar sticky top-0 bg-[var(--secondary-color)] dark:!bg-[var(--dark-bg)] py-[10px] lg:px-[20px] px-[10px] shadow-sm flex items-center justify-between">
                 <div className="flex items-center lg:gap-4 gap-2">
                     <button className="sidebar-menu-button">
                         <i className="fa-solid fa-bars"></i>
                     </button>
                     <div className="bredcrumb lg:block hidden">
                         <div className="flex flex-col gap-[4px]">
-                            <div className="flex items-center space-x-2 text-[var(--adm-accent2)]">
-                <span className="page text-base dark:text-[var(--adm-text-light)]"
+                            <div className="flex items-center space-x-2 text-[var(--ac2)]">
+                <span className="page text-base dark:text-[var(--text-4)]"
                 >Pages /</span
                 >
                                 <span
-                                    className="page text-base dark:text-[var(--adm-text-light)] font-medium"
+                                    className="page text-base dark:text-[var(--text-4)] font-medium"
                                 >Dashboard</span
                                 >
                             </div>
                             <div
-                                className="bredcrumb-title lg:text-2xl text-[18px] font-bold text-[var(--adm-text-primary)]"
+                                className="bredcrumb-title lg:text-2xl text-[18px] font-bold text-[var(--text-1)]"
                             >
                                 <h1>Main Dashboard</h1>
                             </div>
@@ -34,17 +29,17 @@ const Navbar = () => {
                 </div>
 
                 <div
-                    className="nav-icon-menu flex bg-[var(--adm-bg)] dark:bg-[var(--adm-dark-2)] items-center px-[8px] py-[6px] space-x-4 rounded-[30px] gap-2"
+                    className="nav-icon-menu flex bg-[var(--bg)] dark:bg-[var(--dark-bg2)] items-center px-[8px] py-[6px] space-x-4 rounded-[30px] gap-2"
                 >
                     {/* Search Box */}
                     <div className="search-box relative group m-0">
                         <input
                             type="text"
                             placeholder="Search"
-                            className="pl-10 pr-4 py-2 rounded-full bg-[var(--adm-secondary)] dark:bg-[var(--adm-dark-1)] outline-hidden text-sm w-64 dark:text-[var(--adm-text-light)] lg:block hidden"
+                            className="pl-10 pr-4 py-2 rounded-full bg-[var(--secondary-color)] dark:bg-[var(--dark-bg)] outline-hidden text-sm w-64 dark:text-[var(--text-4)] lg:block hidden"
                         />
                         <svg
-                            className="w-5 h-5 lg:block hidden text-[var(--adm-text-primary)] absolute left-3 top-1/2 transform -translate-y-1/2"
+                            className="w-5 h-5 lg:block hidden text-[var(--text-1)] absolute left-3 top-1/2 transform -translate-y-1/2"
                             fill="none"
                             stroke="#A3AED0"
                             viewBox="0 0 24 24"
@@ -58,10 +53,9 @@ const Navbar = () => {
                             ></path>
                         </svg>
                         <button
-                            className="lg:hidden block text-[var(--adm-accent)] dark:text-[var(--adm-text-secondary)] hover:text-[var(--adm-text-primary)] focus:outline-none p-2 rounded-full hover:bg-[var(--adm-secondary)] search-toggle-button"
-                        >
+                            className="lg:hidden block text-[var(--accent)] dark:text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] search-toggle-button">
                             <svg
-                                className="w-5 h-5 lg:hidden block text-[var(--adm-text-primary)]"
+                                className="w-5 h-5 lg:hidden block text-[var(--text-primary)]"
                                 fill="none"
                                 stroke="#A3AED0"
                                 viewBox="0 0 24 24"
@@ -76,12 +70,11 @@ const Navbar = () => {
                             </svg>
                         </button>
                         <div
-                            className="dropdown-box w-64 absolute left-1/2 -translate-x-1/2 mt-2 max-w-sm bg-[var(--adm-bg)] rounded-md border border-[var(--adm-border2)] py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top mobile-search-dropdown lg:hidden"
-                        >
+                            className="dropdown-box w-64 absolute left-1/2 -translate-x-1/2 mt-2 max-w-sm bg-[var(--bg)] rounded-md border border-[var(--border-color2)] py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top mobile-search-dropdown lg:hidden">
                             <input
                                 type="text"
                                 placeholder="Search"
-                                className="block w-full px-4 py-2 bg-[var(--adm-secondary)] dark:bg-[var(--adm-dark-1)] outline-none text-sm dark:text-[var(--adm-text-light)]"
+                                className="block w-full px-4 py-2 bg-[var(--secondary-color)] dark:bg-[var(--dark-bg)] outline-none text-sm dark:text-[var(--text-4)]"
                             />
                         </div>
                     </div>
@@ -90,11 +83,10 @@ const Navbar = () => {
                     <div className="notification-box relative group dropdown-parent m-0">
                         <div
                             className="absolute inset-x-0 -top-2 bottom-0 z-20 pointer-events-none group-hover:pointer-events-auto"
-                            style={{ height: "calc(100% + 1rem)" }}
+                            style={{height: "calc(100% + 1rem)"}}
                         ></div>
                         <button
-                            className="text-[var(--adm-text-secondary)] hover:text-[var(--adm-text-primary)] focus:outline-none p-2 rounded-full hover:bg-[var(--adm-secondary)] relative z-30 dropdown-toggle cursor-pointer"
-                        >
+                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer">
                             <svg
                                 width="24"
                                 height="24"
@@ -116,26 +108,25 @@ const Navbar = () => {
                             </svg>
 
                             <span
-                                className="noti-num w-[16px] h-[16px] absolute flex top-1 right-1 items-center justify-center p-[8px] text-[10px] font-bold leading-none text-[var(--adm-text-light)] bg-red-600 rounded-full"
+                                className="noti-num w-[16px] h-[16px] absolute flex top-1 right-1 items-center justify-center p-[8px] text-[10px] font-bold leading-none text-[var(--text-4)] bg-red-600 rounded-full"
                             >3</span
                             >
                         </button>
                         <div
-                            className="dropdown-box absolute lg:right-0 right-[-100%] mt-2 w-70 bg-[var(--adm-bg)] dark:bg-[var(--adm-dark-2)] rounded-md border border-[var(--adm-border2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right"
-                        >
+                            className="dropdown-box absolute lg:right-0 right-[-100%] mt-2 w-70 bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right">
                             <div
-                                className="title-box px-4 py-3 border-b border-[var(--adm-border2)]"
+                                className="title-box px-4 py-3 border-b border-[var(--border-color2)]"
                             >
-                                <p className="text-sm font-semibold text-[var(--adm-text-primary)]">
+                                <p className="text-sm font-semibold text-[var(--text-1)]">
                                     Notifications
                                 </p>
-                                <p className="text-xs text-[var(--adm-text-secondary)]">
+                                <p className="text-xs text-[var(--text-2)]">
                                     You have 3 unread messages
                                 </p>
                             </div>
                             <a
                                 href="#"
-                                className="item flex items-start px-4 py-3 hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)] border-b border-[var(--adm-border2)]"
+                                className="item flex items-start px-4 py-3 hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)] border-b border-[var(--border-color2)]"
                             >
                                 <img
                                     className="h-8 w-8 rounded-full object-cover mr-3"
@@ -143,20 +134,20 @@ const Navbar = () => {
                                     alt="User Avatar"
                                 />
                                 <div>
-                                    <p className="text-sm font-medium text-[var(--adm-text-primary)]">
+                                    <p className="text-sm font-medium text-[var(--text-primary)]">
                                         John Doe sent you a message
                                     </p>
-                                    <p className="text-xs text-[var(--adm-text-secondary)] mt-1">
+                                    <p className="text-xs text-[var(--text-secondary)] mt-1">
                                         "Hey, check out this new feature!"
                                     </p>
-                                    <span className="text-xs text-[var(--adm-primary)] mt-1 block"
+                                    <span className="text-xs text-[var(--primary)] mt-1 block"
                                     >5 minutes ago</span
                                     >
                                 </div>
                             </a>
                             <a
                                 href="#"
-                                className="item flex items-start px-4 py-3 hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)] border-b border-[var(--adm-border2)]"
+                                className="item flex items-start px-4 py-3 hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)] border-b border-[var(--border-color2)]"
                             >
                                 <img
                                     className="h-8 w-8 rounded-full object-cover mr-3"
@@ -164,10 +155,10 @@ const Navbar = () => {
                                     alt="System Icon"
                                 />
                                 <div>
-                                    <p className="text-sm font-medium text-[var(--adm-text-primary)]">
+                                    <p className="text-sm font-medium text-[var(--text-primary)]">
                                         System Update Available
                                     </p>
-                                    <p className="text-xs text-[var(--adm-text-secondary)] mt-1">
+                                    <p className="text-xs text-[var(--text-secondary)] mt-1">
                                         A new version of the dashboard is ready.
                                     </p>
                                     <span className="text-xs text-green-500 mt-1 block"
@@ -177,7 +168,7 @@ const Navbar = () => {
                             </a>
                             <a
                                 href="#"
-                                className="item flex items-start px-4 py-3 hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="item flex items-start px-4 py-3 hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
                             >
                                 <img
                                     className="h-8 w-8 rounded-full object-cover mr-3"
@@ -185,10 +176,10 @@ const Navbar = () => {
                                     alt="Order Icon"
                                 />
                                 <div>
-                                    <p className="text-sm font-medium text-[var(--adm-text-primary)]">
+                                    <p className="text-sm font-medium text-[var(--text-primary)]">
                                         Your order #12345 has shipped!
                                     </p>
-                                    <p className="text-xs text-[var(--adm-text-secondary)] mt-1">
+                                    <p className="text-xs text-[var(--text-secondary)] mt-1">
                                         Track your delivery here.
                                     </p>
                                     <span className="text-xs text-yellow-500 mt-1 block"
@@ -197,23 +188,23 @@ const Navbar = () => {
                                 </div>
                             </a>
                             <div
-                                className="px-4 py-2 border-t border-[var(--adm-border2)] text-center"
+                                className="px-4 py-2 border-t border-[var(--border-color2)] text-center"
                             >
                                 <a
                                     href="#"
-                                    className="view-all-btn text-sm text-[var(--adm-primary)] hover:underline"
+                                    className="view-all-btn text-sm text-[var(--primary)] hover:underline"
                                 >View all notifications</a
                                 >
                             </div>
                         </div>
                     </div>
 
-                    {/* Theme Toggle Button */}
+                    {/* Dark Toggle Button */}
                     <div className="dark_button_box flex justify-center m-0">
                         <button
                             id="theme-toggle"
                             type="button"
-                            className="text-[var(--adm-text-secondary)] hover:text-[var(--adm-text-primary)] focus:outline-none hover:bg-[var(--adm-secondary)] rounded-full text-sm p-2.5 cursor-pointer"
+                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none hover:bg-[var(--secondary-color)] rounded-full text-sm p-2.5 cursor-pointer"
                         >
                             <svg
                                 id="theme-toggle-dark-icon"
@@ -244,16 +235,13 @@ const Navbar = () => {
                     </div>
 
                     {/* Information Box */}
-                    <div
-                        className="information-box relative lg:block hidden group dropdown-parent m-0"
-                    >
+                    <div className="information-box relative lg:block hidden group dropdown-parent m-0">
                         <div
                             className="absolute inset-x-0 -top-2 bottom-0 z-20 pointer-events-none group-hover:pointer-events-auto"
-                            style={{ height: "calc(100% + 1rem)" }}
+                            style={{height: "calc(100% + 1rem)"}}
                         ></div>
                         <button
-                            className="text-[var(--adm-text-secondary)] hover:text-[var(--adm-text-primary)] focus:outline-none p-2 rounded-full hover:bg-[var(--adm-secondary)] relative z-30 dropdown-toggle cursor-pointer"
-                        >
+                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer">
                             <svg
                                 width="24"
                                 height="24"
@@ -275,23 +263,22 @@ const Navbar = () => {
                             </svg>
                         </button>
                         <div
-                            className="dropdown-box absolute right-0 mt-2 w-46 bg-[var(--adm-bg)] dark:bg-[var(--adm-dark-2)] rounded-md border border-[var(--adm-border2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right"
-                        >
-                            <div className="px-4 py-3 border-b border-[var(--adm-border2)]">
-                                <p className="text-sm font-semibold text-[var(--adm-text-primary)]">
+                            className="dropdown-box absolute right-0 mt-2 w-46 bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right">
+                            <div className="px-4 py-3 border-b border-[var(--border-color2)]">
+                                <p className="text-sm font-semibold text-[var(--text-primary)]">
                                     Need Help?
                                 </p>
-                                <p className="text-xs text-[var(--adm-text-secondary)]">
+                                <p className="text-xs text-[var(--text-secondary)]">
                                     Find answers and support
                                 </p>
                             </div>
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-[var(--adm-text-primary)] hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
                             >
                                 <div className="flex items-center">
                                     <svg
-                                        className="w-4 h-4 mr-2 text-[var(--adm-text-primary)]"
+                                        className="w-4 h-4 mr-2 text-[var(--text-primary)]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -309,11 +296,11 @@ const Navbar = () => {
                             </a>
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-[var(--adm-text-primary)] hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
                             >
                                 <div className="flex items-center">
                                     <svg
-                                        className="w-4 h-4 mr-2 text-[var(--adm-text-primary)]"
+                                        className="w-4 h-4 mr-2 text-[var(--text-primary)]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -331,11 +318,11 @@ const Navbar = () => {
                             </a>
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-[var(--adm-text-primary)] hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--secondary)] dark:text-[var(--text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
                             >
                                 <div className="flex items-center">
                                     <svg
-                                        className="w-4 h-4 mr-2 text-[var(--adm-text-primary)]"
+                                        className="w-4 h-4 mr-2 text-[var(--text-primary)]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -358,11 +345,10 @@ const Navbar = () => {
                     <div className="profile-box relative group dropdown-parent m-0">
                         <div
                             className="absolute inset-x-0 -top-2 bottom-0 z-20 pointer-events-none group-hover:pointer-events-auto"
-                            style={{ height: "calc(100% + 1rem)" }}
+                            style={{height: "calc(100% + 1rem)"}}
                         ></div>
                         <button
-                            className="w-[40px] h-[40px] rounded-full flex items-center overflow-hidden focus:outline-none relative z-30 dropdown-toggle cursor-pointer"
-                        >
+                            className="w-[40px] h-[40px] rounded-full flex items-center overflow-hidden focus:outline-none relative z-30 dropdown-toggle cursor-pointer">
                             <img
                                 src="/admin/icon/navbar-profile.png"
                                 alt="User Avatar"
@@ -370,29 +356,28 @@ const Navbar = () => {
                             />
                         </button>
                         <div
-                            className="dropdown-box absolute right-0 mt-2 w-48 bg-[var(--adm-bg)] dark:bg-[var(--adm-dark-2)] rounded-md border border-[var(--adm-border2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right"
-                        >
-                            <div className="px-4 py-3 border-b border-[var(--adm-border2)]">
-                                <p className="text-sm font-semibold text-[var(--adm-text-primary)]">
+                            className="dropdown-box absolute right-0 mt-2 w-48 bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-10 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right">
+                            <div className="px-4 py-3 border-b border-[var(--border-color2)]">
+                                <p className="text-sm font-semibold text-[var(--text-1)]">
                                     John Doe
                                 </p>
-                                <p className="text-xs text-[var(--adm-text-secondary)] truncate">
+                                <p className="text-xs text-[var(--text-2)] truncate">
                                     john.doe@example.com
                                 </p>
                             </div>
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-[var(--adm-text-primary)] hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-[var(--text-1)] hover:bg-[var(--secondary-color)] dark:text-[var(--text-2)] dark:hover:bg-[var(--dark-hover)]"
                             >My Profile</a
                             >
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-[var(--adm-text-primary)] hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-[var(--text-1)] hover:bg-[var(--secondary-color)] dark:text-[var(--text-2)] dark:hover:bg-[var(--dark-hover)]"
                             >Settings</a
                             >
                             <a
                                 href="#"
-                                className="block px-4 py-2 text-sm text-red-600 hover:bg-[var(--adm-secondary)] dark:text-[var(--adm-text-secondary)] dark:hover:bg-[var(--adm-hover-dark)]"
+                                className="block px-4 py-2 text-sm text-red-600 hover:bg-[var(--secondary-color)] dark:text-[var(--text-2)] dark:hover:bg-[var(--dark-hover)]"
                             >Logout</a
                             >
                         </div>
@@ -404,4 +389,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

@@ -1,43 +1,62 @@
+
+
+/* ..................................................... */
+/* .............. Default CSS END ...................... */
+/* ..................................................... */
+
+/* Import Tailwind */
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+
+/* @font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/DMSans.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+} */
+
+/* Dark Mode Import */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
-    /* Admin Theme Colors */
-    --adm-font: "DM Sans";
-    --adm-primary: #4318ff;
-    --adm-secondary: #f4f7fe;
-    --adm-border: #7e7e7e;
-    --adm-border2: #e0e5f2;
-    --adm-border-dark: #62636654;
-    --adm-hover-light: #abc2f6;
-    --adm-bg: #ffffff;
-    --adm-text-primary: #2b3674;
-    --adm-text-secondary: #a3aed0;
-    --adm-text-tertiary: #464646;
-    --adm-text-light: #ffffff;
-    --adm-accent: #a3aed0;
-    --adm-accent2: #707eae;
-
-    /* Admin Dark Mode Colors */
-    --adm-hover-dark: #3b509c81;
-    --adm-dark-1: #0b1437;
-    --adm-dark-2: #111c44;
-    --adm-dark-3: #1b254b;
+    --primary-font: "DM Sans";
+    --primary-color: #4318ff;
+    --secondary-color: #f4f7fe;
+    --border-color: #7e7e7e;
+    --border-color2: #e0e5f2;
+    --dark-border: #62636654;
+    --light-hover: #abc2f6;
+    --bg: #ffffff;
+    --text-1: #2b3674;
+    --text-2: #a3aed0;
+    --text-3: #464646;
+    --text-4: #ffffff;
+    --accent: #a3aed0;
+    --ac2: #707eae;
+    --dark-hover: #3b509c81;
+    --dark-bg: #0b1437;
+    --dark-bg2: #111c44;
+    --dark-bg3: #1b254b;
   }
 
   body {
-    font-family: var(--adm-font), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--primary-font);
   }
 
-  ol, ul, menu {
+  ol,
+  ul,
+  menu {
     list-style: none;
   }
 
   p {
     font-size: 16px;
   }
+}
 
+/* Dark mode */
+@layer base {
   .dark h1 {
     color: var(--text-4) !important;
     transition: 0.8s;

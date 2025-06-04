@@ -1,12 +1,10 @@
 import React from 'react';
-import Sidebar from "./components/admin/Sidebar.jsx";
-import Navbar from "./components/admin/Navbar.jsx";
+import AdminLayout from "./pages/admin/AdminLayout.jsx";
 
 const App = () => {
     return (
         <div>
-            <Sidebar />
-            <Navbar />
+            <AdminLayout/>
         </div>
     );
 };

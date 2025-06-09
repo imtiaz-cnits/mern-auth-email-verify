@@ -4,10 +4,16 @@ import JavaScriptClient from "../../components/JavaScriptClient/JavaScriptClient
 
 const AdminLayout = ({ children }) => {
     return (
-        <div className="bg-[var(--secondary-color)] dark:bg-[var(--dark-bg)]">
+        <div className="min-h-screen relative bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
             <Sidebar />
-            <Navbar />
-            {children}
+            <div className="main">
+                <div className="w-full">
+                    <Navbar />
+                    <div className="p-6 bg-[var(--secondary-color)] dark:bg-[var(--dark-bg)]">
+                        {children}
+                    </div>
+                </div>
+            </div>
             <JavaScriptClient/>
         </div>
     );

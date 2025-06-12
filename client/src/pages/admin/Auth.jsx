@@ -35,7 +35,7 @@ const Auth = () => {
     };
 
     return (
-        <div className="flex h-screen sign_in">
+        <div className="flex h-screen sign_in bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
             <div className="w-full lg:w-1/2 flex items-center justify-center px-8 md:py-[20px] relative bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
                 <div className="w-full h-screen max-w-md flex flex-col items-center justify-between py-[20px]">
                     <div className="w-full">
@@ -163,12 +163,12 @@ const Auth = () => {
                         </button>
 
                         <p className="text-[var(--text-3)]">
-                            Not registered yet?
+                            Not registered yet?{" "}
                             <a
                                 href="#"
                                 onClick={handleSignupClick}
                                 className="create_account_btn text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400 ml-1"
-                            >Create an Account</a>
+                            > Create an Account</a>
                         </p>
                     </form>
                     {/* Sign In Form */}

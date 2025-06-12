@@ -1,29 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useDarkMode from '../../hooks/useDarkMode';
 
 const Auth = () => {
+    const navigate = useNavigate();
+    const [showSignup, setShowSignup] = useState(false);
+    const [dark, setDark] = useDarkMode();
+
+    useEffect(() => {
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        if (dark) {
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        } else {
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        }
+    }, [dark]);
+
+    const toggleDarkMode = () => {
+        setDark(!dark);
+    };
+
+    const handleSignupClick = (e) => {
+        e.preventDefault();
+        setShowSignup(true);
+    };
+
+    const handleSignInClick = (e) => {
+        e.preventDefault();
+        setShowSignup(false);
+    };
+
     return (
         <div className="flex h-screen sign_in">
             <div className="w-full lg:w-1/2 flex items-center justify-center px-8 md:py-[20px] relative bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
                 <div className="w-full h-screen max-w-md flex flex-col items-center justify-between py-[20px]">
                     <div className="w-full">
-                        <a href="#" className="breadcrumb text-[var(--text-3)] flex items-center dark:hover:text-[var(--text-4)] dark:text-[var(--text-4)] hover:text-black transition duration-400">
+                        <a href="#" className="breadcrumb inline-flex items-center text-[var(--text-3)] dark:text-[var(--text-4)] hover:text-[var(--primary-color)] dark:hover:text-[var(--primary-color)] transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 mr-1"
+                                className="h-5 w-5 mr-2"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
-                                strokeWidth="2">
-                                <path strokeLinecap="round"
+                                strokeWidth="2.5">
+                                <path
+                                    strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    d="M15 19l-7-7 7-7"/>
+                                    d="M15 19l-7-7 7-7"
+                                />
                             </svg>
-                            <p>Back to dashboard</p>
+                            <span className="text-base">Back to dashboard</span>
                         </a>
                     </div>
 
-                    {/*Sign In Form*/}
-                    <form className="w-full dark:text-[var(--text-4)]">
-                        <h1 className="form_title text-[30px] font-bold text-[var(--text-1)]">
+                    {/* Sign In Form */}
+                    <form className={`w-full dark:text-[var(--text-4)] main-form ${showSignup ? 'hidden' : ''}`}>
+                        <h1 className="form_title text-[30px] font-bold text-[var(--text-1)] dark:text-[var(--text-4)]">
                             Sign In
                         </h1>
                         <p className="text-[var(--text-3)] mb-[20px]">
@@ -131,16 +166,16 @@ const Auth = () => {
                             Not registered yet?
                             <a
                                 href="#"
-                                className="create_account_btn text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400"
-                            >Create an Account</a
-                            >
+                                onClick={handleSignupClick}
+                                className="create_account_btn text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400 ml-1"
+                            >Create an Account</a>
                         </p>
                     </form>
-                    {/*Sign In Form*/}
+                    {/* Sign In Form */}
 
-                    {/*Sign Up Form*/}
-                    <div id="signup_section" className="hidden w-full">
-                        <form className="w-full">
+                    {/* Sign Up Form */}
+                    <div id="signup_section" className={`w-full ${showSignup ? '' : 'hidden'}`}>
+                        <form className="w-full" onSubmit={(e) => e.preventDefault()}>
                             <h1 className="form_title text-[30px] font-bold text-[var(--text-1)]">
                                 Create Account
                             </h1>
@@ -204,24 +239,25 @@ const Auth = () => {
                                 />
                             </div>
 
-                            <button
+                            <button type="submit"
                                 className="sign_up_btn w-full bg-[var(--primary-color)] text-[var(--text-4)] py-[10px] px-4 rounded-[12px] hover:bg-[var(--text-1)] transition duration-400 mb-[20px] shadow-md cursor-pointer"
                             >
                                 Sign Up
                             </button>
 
                             <p className="text-[var(--text-3)]">
-                                Already have an account?
-                                <a
-                                    href="#"
-                                    className="sign_in_toggle text-[var(--primary-color)] font-semibold hover:underline transition duration-400"
+                                Already have an account?{" "}
+                                <button
+                                    type="button"
+                                    onClick={handleSignInClick}
+                                    className="sign_in_toggle text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400 cursor-pointer"
                                 >
                                     Sign In
-                                </a>
+                                </button>
                             </p>
                         </form>
                     </div>
-                    {/*Sign Up Form*/}
+                    {/* Sign Up Form */}
 
                     <p className="copyright w-full text-[var(--text-3)]">
                         &copy; 2025 Horizon. All Rights Reserved. by CodeNext IT
@@ -348,6 +384,7 @@ const Auth = () => {
                             id="theme-toggle"
                             type="button"
                             className="bg-[#6A53FF] rounded-full text-sm p-2.5 cursor-pointer"
+                            onClick={toggleDarkMode}
                         >
                             <svg
                                 id="theme-toggle-dark-icon"

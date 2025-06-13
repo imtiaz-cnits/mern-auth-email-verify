@@ -1,5 +1,6 @@
 import React from "react";
 import useDarkMode from "../../hooks/useDarkMode.jsx";
+import { useSidebar } from "../../contexts/SidebarContext.jsx"; // Import useSidebar
 
 const DarkModeToggle = () => {
     const [dark, setDark] = useDarkMode();
@@ -10,7 +11,7 @@ const DarkModeToggle = () => {
                 type="button"
                 aria-label="Toggle dark mode"
                 onClick={() => setDark(!dark)}
-                className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none hover:bg-[var(--secondary-color)] rounded-full text-sm p-2.5 cursor-pointer"
+                className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none hover:bg-[var(--secondary-color)] rounded-full text-sm p-2.5 cursor-pointer transition-colors duration-300" // Added transition
             >
                 {dark ? (
                     // Sun icon for light mode
@@ -33,11 +34,16 @@ const DarkModeToggle = () => {
 };
 
 const Navbar = () => {
+    const { toggleSidebar } = useSidebar(); // Add useSidebar to handle mobile toggle
+
     return (
-        <nav className="sticky top-0 z-50 bg-[var(--secondary-color)] dark:!bg-[var(--dark-bg)] py-[10px] lg:px-[20px] px-[10px] shadow-sm">
+        <nav className="sticky top-0 z-60 bg-[var(--secondary-color)] dark:!bg-[var(--dark-bg)] py-[10px] lg:px-[20px] px-[10px] shadow-sm transition-all duration-300"> {/* Updated z-index and added transition */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center lg:gap-4 gap-2">
-                    <button className="sidebar-menu-button lg:hidden">
+                    <button
+                        className="sidebar-menu-button lg:hidden"
+                        onClick={toggleSidebar} // Wire toggleSidebar for mobile
+                    >
                         <i className="fa-solid fa-bars"></i>
                     </button>
                     <div className="bredcrumb lg:block hidden">
@@ -76,7 +82,8 @@ const Navbar = () => {
                             ></path>
                         </svg>
                         <button
-                            className="lg:hidden block text-[var(--accent)] dark:text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] search-toggle-button">
+                            className="lg:hidden block text-[var(--accent)] dark:text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] search-toggle-button"
+                        >
                             <svg
                                 className="w-5 h-5 lg:hidden block text-[var(--text-primary)]"
                                 fill="none"
@@ -93,7 +100,8 @@ const Navbar = () => {
                             </svg>
                         </button>
                         <div
-                            className="dropdown-box w-64 absolute -left-[8px] mt-2 max-w-sm bg-[var(--bg)] rounded-md border border-[var(--border-color2)] py-1 z-[100] hidden group-hover:block">
+                            className="dropdown-box w-64 absolute -left-[8px] mt-2 max-w-sm bg-[var(--bg)] rounded-md border border-[var(--border-color2)] py-1 z-[100] hidden group-hover:block"
+                        >
                             <input
                                 type="text"
                                 placeholder="Search"
@@ -109,7 +117,8 @@ const Navbar = () => {
                             style={{ height: "calc(100% + 1rem)" }}
                         ></div>
                         <button
-                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer">
+                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer"
+                        >
                             <svg
                                 width="24"
                                 height="24"
@@ -135,7 +144,8 @@ const Navbar = () => {
                             >3</span>
                         </button>
                         <div
-                            className="dropdown-box absolute right-0 mt-2 w-[280px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block">
+                            className="dropdown-box absolute right-0 mt-2 w-[280px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block"
+                        >
                             <div className="title-box px-4 py-3 border-b border-[var(--border-color2)]">
                                 <p className="text-sm font-semibold text-[var(--text-1)]">
                                     Notifications
@@ -223,7 +233,8 @@ const Navbar = () => {
                             style={{ height: "calc(100% + 1rem)" }}
                         ></div>
                         <button
-                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer">
+                            className="text-[var(--text-2)] hover:text-[var(--text-1)] focus:outline-none p-2 rounded-full hover:bg-[var(--secondary-color)] relative z-30 dropdown-toggle cursor-pointer"
+                        >
                             <svg
                                 width="24"
                                 height="24"
@@ -245,7 +256,8 @@ const Navbar = () => {
                             </svg>
                         </button>
                         <div
-                            className="dropdown-box absolute right-0 mt-2 w-[200px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block">
+                            className="dropdown-box absolute right-0 mt-2 w-[200px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block"
+                        >
                             <div className="px-4 py-3 border-b border-[var(--border-color2)]">
                                 <p className="text-sm font-semibold text-[var(--text-primary)]">
                                     Need Help?
@@ -330,7 +342,8 @@ const Navbar = () => {
                             style={{ height: "calc(100% + 1rem)" }}
                         ></div>
                         <button
-                            className="w-[40px] h-[40px] rounded-full flex items-center overflow-hidden focus:outline-none relative z-30 dropdown-toggle cursor-pointer">
+                            className="w-[40px] h-[40px] rounded-full flex items-center overflow-hidden focus:outline-none relative z-30 dropdown-toggle cursor-pointer"
+                        >
                             <img
                                 src="/admin/icon/navbar-profile.png"
                                 alt="User Avatar"
@@ -338,7 +351,8 @@ const Navbar = () => {
                             />
                         </button>
                         <div
-                            className="dropdown-box absolute right-0 mt-2 w-[200px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block">
+                            className="dropdown-box absolute right-0 mt-2 w-[200px] bg-[var(--bg)] dark:bg-[var(--dark-bg2)] rounded-md border border-[var(--border-color2)] dark:border-hidden py-1 z-[100] hidden group-hover:block"
+                        >
                             <div className="px-4 py-3 border-b border-[var(--border-color2)]">
                                 <p className="text-sm font-semibold text-[var(--text-1)]">
                                     John Doe
@@ -368,4 +382,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

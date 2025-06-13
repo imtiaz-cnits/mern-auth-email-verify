@@ -2,6 +2,7 @@ import Navbar from "../../components/admin/Navbar.jsx";
 import Sidebar from "../../components/admin/Sidebar.jsx";
 import JavaScriptClient from "../../components/JavaScriptClient/JavaScriptClient.jsx";
 import Footer from "../../components/admin/Footer.jsx";
+import {Outlet} from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
     return (
@@ -11,7 +12,7 @@ const AdminLayout = ({ children }) => {
                 <div className="w-full">
                     <Navbar />
                     <div className="p-6 bg-[var(--secondary-color)] dark:bg-[var(--dark-bg)]">
-                        {children}
+                        <Outlet />
                     </div>
                     <Footer />
                 </div>

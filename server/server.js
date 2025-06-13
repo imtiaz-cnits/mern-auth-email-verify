@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 3001;
 
 // Connect to MongoDB
 connectDB()

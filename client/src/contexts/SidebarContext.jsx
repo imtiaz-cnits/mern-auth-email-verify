@@ -4,16 +4,12 @@ const SidebarContext = createContext();
 
 export const SidebarProvider = ({ children }) => {
     const [isCollapsed, setIsCollapsed] = useState(() => {
-        // Get initial state from localStorage
         const stored = localStorage.getItem('sidebarCollapsed');
         return stored ? JSON.parse(stored) : false;
     });
 
     useEffect(() => {
-        // Update localStorage when state changes
         localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
-
-        // Update body class for responsive styling
         document.body.classList.toggle('sidebar-collapsed', isCollapsed);
     }, [isCollapsed]);
 
@@ -21,8 +17,11 @@ export const SidebarProvider = ({ children }) => {
         setIsCollapsed(prev => !prev);
     };
 
+    // New helper function:
+    const isNotCollapsed = () => !isCollapsed;
+
     return (
-        <SidebarContext.Provider value={{ isCollapsed, toggleSidebar }}>
+        <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, isNotCollapsed }}>
             {children}
         </SidebarContext.Provider>
     );

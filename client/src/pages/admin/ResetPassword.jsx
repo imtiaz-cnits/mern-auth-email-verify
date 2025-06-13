@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useDarkMode from '../../hooks/useDarkMode';
 
-const Auth = () => {
+const ResetPassword = () => {
     const [dark, setDark] = useDarkMode();
 
     useEffect(() => {
@@ -277,4 +277,4 @@ const Auth = () => {
     );
 };
 
-export default Auth;
+export default ResetPassword;

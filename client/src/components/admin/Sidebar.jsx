@@ -1,11 +1,11 @@
 import React from 'react';
-import { toast } from "sonner";
+import {toast} from "sonner";
 import sidebarLogo from '../../../public/admin/icon/sidebar-logo.png';
 import sidebarBrandNameLogo from '../../../public/admin/icon/sidebar-brandname-logo.png';
 import darkSidebarLogo from '../../../public/admin/icon/dark-sidebar-logo.png';
 import darkSidebarBrandNameLogo from '../../../public/admin/icon/dark-brand-name-logo.png';
 import useDarkMode from "../../hooks/useDarkMode.jsx";
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import api from "../../api/index.js";
 
 const Sidebar = () => {
@@ -32,21 +32,22 @@ const Sidebar = () => {
     };
 
     return (
-        <aside className="sidebar fixed top-0 left-0 h-screen w-[270px] bg-[var(--bg)] dark:!bg-[var(--dark-bg2)] transition-all duration-[0.4s] ease">
+        <aside
+            className="sidebar fixed top-0 left-0 h-screen w-[270px] bg-[var(--bg)] dark:!bg-[var(--dark-bg2)] transition-all duration-[0.4s] ease">
             <header className="sidebar-header shadow-sm dark:!border-[var(--border-color2)]">
                 {/* Light mode logos */}
                 <div className={`light-logo-box ${dark ? 'hidden' : 'block'}`}>
                     <Link to="/" className="header-logo">
-                        <img className="sidebar-logo" src={sidebarLogo} alt="Logo" />
-                        <img className="sidebar-brandname-logo" src={sidebarBrandNameLogo} alt="Brand Logo" />
+                        <img className="sidebar-logo" src={sidebarLogo} alt="Logo"/>
+                        <img className="sidebar-brandname-logo" src={sidebarBrandNameLogo} alt="Brand Logo"/>
                     </Link>
                 </div>
 
                 {/* Dark mode logos */}
                 <div className={`dark-logo-box ${dark ? 'block' : 'hidden'}`}>
                     <Link to="/" className="dark-header-logo">
-                        <img className="sidebar-logo" src={darkSidebarLogo} alt="Logo" />
-                        <img className="sidebar-brandname-logo" src={darkSidebarBrandNameLogo} alt="Brand Logo" />
+                        <img className="sidebar-logo" src={darkSidebarLogo} alt="Logo"/>
+                        <img className="sidebar-brandname-logo" src={darkSidebarBrandNameLogo} alt="Brand Logo"/>
                     </Link>
                 </div>
 
@@ -69,7 +70,7 @@ const Sidebar = () => {
                   </g>
                   <defs>
                     <clipPath id="clip0_402_2908">
-                      <rect width="24" height="24" fill="white" />
+                      <rect width="24" height="24" fill="white"/>
                     </clipPath>
                   </defs>
                 </svg>
@@ -83,21 +84,22 @@ const Sidebar = () => {
                         </ul>
                     </li>
 
-                    <li className="nav-item">
-                        <Link to="/nft-marketplace" className="nav-link">
-              <span className="w-[24px]">
-                {/* Placeholder for NFT icon SVG */}
-                  <i className="fa-solid fa-cubes text-[var(--text-2)]"></i>
-              </span>
-                            <span className="nav-label dark:text-[var(--text-4)]">NFT Marketplace</span>
-                        </Link>
-                    </li>
-
                     <li className="nav-item dropdown-container">
                         <Link to="/tables" className="nav-link dropdown-toggle">
               <span className="w-[24px]">
                 {/* Placeholder for Tables icon SVG */}
-                  <i className="fa-solid fa-table text-[var(--text-2)]"></i>
+                  <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2896)">
+                  <path
+                      d="M7.46683 10.7333H7.70016C8.5985 10.7333 9.3335 11.4683 9.3335 12.3667V20.5333C9.3335 21.4317 8.5985 22.1667 7.70016 22.1667H7.46683C6.5685 22.1667 5.8335 21.4317 5.8335 20.5333V12.3667C5.8335 11.4683 6.5685 10.7333 7.46683 10.7333V10.7333ZM14.0002 5.83334C14.8985 5.83334 15.6335 6.56834 15.6335 7.46668V20.5333C15.6335 21.4317 14.8985 22.1667 14.0002 22.1667C13.1018 22.1667 12.3668 21.4317 12.3668 20.5333V7.46668C12.3668 6.56834 13.1018 5.83334 14.0002 5.83334ZM20.5335 15.1667C21.4318 15.1667 22.1668 15.9017 22.1668 16.8V20.5333C22.1668 21.4317 21.4318 22.1667 20.5335 22.1667C19.6352 22.1667 18.9002 21.4317 18.9002 20.5333V16.8C18.9002 15.9017 19.6352 15.1667 20.5335 15.1667V15.1667Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2896">
+                    <rect width="28" height="28" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
               </span>
                             <span className="nav-label dark:text-[var(--text-4)]">Tables</span>
                             <i className="dropdown-icon fa-solid fa-angle-down"></i>
@@ -125,7 +127,18 @@ const Sidebar = () => {
                         <Link to="/kanban" className="nav-link">
               <span className="w-[24px]">
                 {/* Placeholder for Kanban icon SVG */}
-                  <i className="fa-solid fa-columns text-[var(--text-2)]"></i>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2890)">
+                  <path
+                      d="M4 13H10C10.55 13 11 12.55 11 12V4C11 3.45 10.55 3 10 3H4C3.45 3 3 3.45 3 4V12C3 12.55 3.45 13 4 13ZM4 21H10C10.55 21 11 20.55 11 20V16C11 15.45 10.55 15 10 15H4C3.45 15 3 15.45 3 16V20C3 20.55 3.45 21 4 21ZM14 21H20C20.55 21 21 20.55 21 20V12C21 11.45 20.55 11 20 11H14C13.45 11 13 11.45 13 12V20C13 20.55 13.45 21 14 21ZM13 4V8C13 8.55 13.45 9 14 9H20C20.55 9 21 8.55 21 8V4C21 3.45 20.55 3 20 3H14C13.45 3 13 3.45 13 4Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2890">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
               </span>
                             <span className="nav-label dark:text-[var(--text-4)]">Kanban</span>
                         </Link>
@@ -135,45 +148,86 @@ const Sidebar = () => {
                         <Link to="/profile" className="nav-link">
               <span className="w-[24px]">
                 {/* Placeholder for Profile icon SVG */}
-                  <i className="fa-solid fa-user text-[var(--text-2)]"></i>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2884)">
+                  <path
+                      d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V19C4 19.55 4.45 20 5 20H19C19.55 20 20 19.55 20 19V18C20 15.34 14.67 14 12 14Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2884">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
               </span>
                             <span className="nav-label dark:text-[var(--text-4)]">Profile</span>
                         </Link>
                     </li>
 
                     <li className="nav-item">
-                        <Link to="/signin" className="nav-link">
+                        <Link to="/auth" className="nav-link">
               <span className="w-[24px]">
                 {/* Placeholder for Sign in icon SVG */}
-                  <i className="fa-solid fa-sign-in-alt text-[var(--text-2)]"></i>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2876)">
+                  <path
+                      d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM9 8V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8H9Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2876">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
               </span>
                             <span className="nav-label dark:text-[var(--text-4)]">Sign In</span>
                         </Link>
                     </li>
 
-                    <li className="nav-item dropdown-container">
-                        <Link to="/bookmarks" className="nav-link dropdown-toggle">
-                            <div className="w-24px">
-                                <i className="fa-solid fa-star text-[var(--text-2)]"></i>
-                            </div>
-                            <span className="nav-label dark:text-[var(--text-4)]">Bookmarks</span>
-                            <i className="dropdown-icon fa-solid fa-angle-down"></i>
+                    <li className="nav-item">
+                        <Link to="/verify-email" className="nav-link">
+              <span className="w-[24px]">
+                {/* Placeholder for Sign in icon SVG */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2876)">
+                  <path
+                      d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM9 8V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8H9Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2876">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              </span>
+                            <span className="nav-label dark:text-[var(--text-4)]">Verify Email</span>
                         </Link>
-                        <ul className="dropdown-menu">
-                            <li className="nav-item">
-                                <Link to="/bookmarks/blogs" className="nav-link dropdown-link">
-                                    <i className="fa-solid fa-circle"></i>
-                                    <span>Favorite Blogs</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/bookmarks/guides" className="nav-link dropdown-link">
-                                    <i className="fa-solid fa-circle"></i>
-                                    <span>Resource Guides</span>
-                                </Link>
-                            </li>
-                        </ul>
                     </li>
+
+                    <li className="nav-item">
+                        <Link to="/reset-password" className="nav-link">
+              <span className="w-[24px]">
+                {/* Placeholder for Sign in icon SVG */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_402_2876)">
+                  <path
+                      d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM9 8V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8H9Z"
+                      fill="#A3AED0"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_402_2876">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              </span>
+                            <span className="nav-label dark:text-[var(--text-4)]">Reset Password</span>
+                        </Link>
+                    </li>
+
                 </ul>
 
                 <ul className="nav-list secondary-nav dark:!bg-[var(--dark-bg2)]">

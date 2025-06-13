@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDarkMode from '../../hooks/useDarkMode';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { AuthContext } from '../../contexts/AuthContext'; // Import AuthContext
 
-const Auth = () => {
+const VerifyEmail = () => {
+    const { token } = useContext(AuthContext); // Access token from context
     const [dark, setDark] = useDarkMode();
+    const [otp, setOtp] = useState('');
+    const [error, setError] = useState('');
+    const [isResending, setIsResending] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -22,30 +30,101 @@ const Auth = () => {
         setDark(!dark);
     };
 
+    // Function to handle email verification
+    const handleVerify = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (!token) {
+            setError('Please log in to verify your email.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/verify-account', { otp }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                toast.success('Email verified successfully!');
+                setTimeout(() => navigate('/dashboard'), 2000);
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Verification failed. Please try again.';
+            setError(errorMessage);
+        }
+    };
+
+    // Function to handle resending OTP
+    const handleResendOtp = async () => {
+        setIsResending(true);
+        setError('');
+
+        if (!token) {
+            setError('Please log in to resend OTP.');
+            setIsResending(false);
+            return;
+        }
+
+        // console.log('Sending request with token:', token); // Log the token being sent
+        // console.log('Full Axios config:', {
+        //     method: 'POST',
+        //     url: 'http://localhost:3001/api/send-verification-otp',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${token}`,
+        //     },
+        // });
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/send-verification-otp', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                toast.success('New OTP sent to your email!');
+                setOtp('');
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Failed to resend OTP. Please try again.';
+            setError(errorMessage);
+            console.error('Resend OTP error:', err.response ? err.response.data : err);
+        } finally {
+            setIsResending(false);
+        }
+    };
+
     return (
         <div className="flex h-screen sign_in bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
             <div className="w-full lg:w-1/2 flex items-center justify-center px-8 md:py-[20px] relative bg-[var(--bg)] dark:bg-[var(--dark-bg)]">
                 <div className="w-full h-screen max-w-md flex flex-col items-center justify-between py-[20px]">
                     <div className="w-full">
-                        <a href='/' className="breadcrumb inline-flex items-center text-[var(--text-3)] dark:text-[var(--text-4)] hover:text-[var(--primary-color)] dark:hover:text-[var(--primary-color)] transition-colors duration-300">
+                        <a href='/auth'
+                           className="breadcrumb inline-flex items-center text-[var(--text-3)] dark:text-[var(--text-4)] hover:text-[var(--primary-color)] dark:hover:text-[var(--primary-color)] transition-colors duration-400">
                             <svg xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 mr-2"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2.5">
+                                 className="h-5 w-5 mr-2"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
+                                 strokeWidth="2.5">
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     d="M15 19l-7-7 7-7"
                                 />
                             </svg>
-                            <span className="text-base">Back to dashboard</span>
+                            <span className="text-base">Back to Sign In</span>
                         </a>
                     </div>
 
                     {/* Email Verify by OTP Form */}
-                    <form className={`w-full dark:text-[var(--text-4)] main-form`}>
+                    <form className={`w-full dark:text-[var(--text-4)] main-form`} onSubmit={handleVerify}>
                         <h1 className="form_title text-[30px] font-bold text-[var(--text-1)] dark:text-[var(--text-4)]">
                             Email Verification
                         </h1>
@@ -54,43 +133,59 @@ const Auth = () => {
                         </p>
 
                         <div className="form_grp mb-4">
-                            <label htmlFor="email" className="block text-[var(--text-1)] font-semibold mb-2">Enter Your OTP*</label>
-                            <input type="number"
+                            <label htmlFor="email" className="block text-[var(--text-1)] font-semibold mb-2">Enter Your
+                                OTP*</label>
+                            <input
+                                type="number"
                                 id="otp"
                                 placeholder="123456"
-                                className="w-full px-4 py-3 border border-[var(--border-color2)] rounded-[12px] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)] focus:border-transparent duration-300"/>
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                className="w-full px-4 py-3 border border-[var(--border-color2)] rounded-[12px] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)] focus:border-transparent duration-300"
+                            />
                         </div>
+
+                        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
                         <div className="flex items-center justify-between my-[20px]">
-                            <a href="#" className="text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400">Forgot password?</a>
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleResendOtp();
+                                }}
+                                className={`text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400 ${isResending ? 'cursor-not-allowed opacity-50' : ''}`}
+                                disabled={isResending}
+                            >
+                                {isResending ? 'Resending...' : 'Resend OTP'}
+                            </a>
                         </div>
 
-                        <button className="sign_in_btn w-full bg-[var(--primary-color)] text-[var(--text-4)] py-[10px] px-4 rounded-[12px] hover:bg-[var(--text-1)] transition duration-400 mb-[20px] shadow-md cursor-pointer">
+                        <button
+                            type="submit"
+                            className="sign_in_btn w-full bg-[var(--primary-color)] text-[var(--text-4)] py-[10px] px-4 rounded-[12px] hover:bg-[var(--text-1)] transition duration-400 mb-[20px] shadow-md cursor-pointer"
+                        >
                             Verify Now
                         </button>
-
                     </form>
-                    {/* Sign In Form */}
+                    {/* Email Verify by OTP Form */}
 
                     <p className="copyright w-full text-[var(--text-3)]">
-                        &copy; 2025 Horizon. All Rights Reserved. by CodeNext IT
+                        © 2025 Horizon. All Rights Reserved. by CodeNext IT
                     </p>
                 </div>
             </div>
 
             <div
-                className="hidden lg:flex w-1/2 bg-[var(--primary-color)] rounded-bl-[100px] items-center justify-center flex-col p-8 relative"
-            >
+                className="hidden lg:flex w-1/2 bg-[var(--primary-color)] rounded-bl-[100px] items-center justify-center flex-col p-8 relative">
                 <div
-                    className="w-38 h-38 bg-[var(--primary-color)] rounded-full flex items-center justify-center mb-8 shadow-lg"
-                >
+                    className="w-38 h-38 bg-[var(--primary-color)] rounded-full flex items-center justify-center mb-8 shadow-lg">
                     <svg
                         width="280"
                         height="280"
                         viewBox="0 0 280 280"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
+                        xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M69.0231 186.199H210.362V247.65H69.0231V186.199Z"
                             fill="white"
@@ -163,7 +258,7 @@ const Auth = () => {
                     href="https://horizon-ui.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[var(--text-4)] text-center border border-[#abe1fa86] py-[20px] px-[60px] rounded-[16px] hover:bg-[var(--bg)] hover:text-[var(--primary-color)] transition duration-400"
+                    className="text-[var(--text-4)] text-center border border-[#abe1fa86] py-[20px] px-[60px] rounded-[12px] hover:bg-[var(--bg)] hover:text-[var(--primary-color)] transition duration-400"
                 >
                     <h5>Learn more about Horizon UI on</h5>
                     <span className="font-semibold text-[28px]">horizon-ui.com</span>
@@ -232,4 +327,4 @@ const Auth = () => {
     );
 };
 
-export default Auth;
+export default VerifyEmail;

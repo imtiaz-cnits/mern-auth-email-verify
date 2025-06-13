@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'sonner';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useDarkMode from '../../hooks/useDarkMode';
 import api from '../../api/index.js';
+import { AuthContext } from '../../contexts/AuthContext'; // Import AuthContext
 
 const Auth = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { updateToken } = useContext(AuthContext); // Access updateToken from context
     const [showSignup, setShowSignup] = useState(false);
     const [dark, setDark] = useDarkMode();
     const [formData, setFormData] = useState({
@@ -131,6 +133,8 @@ const Auth = () => {
                 password: formData.password,
             });
             if (response.data.success) {
+                const { token } = response.data; // Assume token is returned
+                updateToken(token); // Update context with token
                 setSuccess(response.data.message);
                 toast.success('Login successful!');
                 setFormData({
@@ -204,8 +208,7 @@ const Auth = () => {
                         </div>
 
                         <div className="form_grp mb-4 relative">
-                            <label htmlFor="password"
-                                   className="block text-[var(--text-1)] font-semibold mb-2">Password*</label>
+                            <label htmlFor="password" className="block text-[var(--text-1)] font-semibold mb-2">Password*</label>
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 id="password"
@@ -219,7 +222,7 @@ const Auth = () => {
                             <button
                                 type="button"
                                 onClick={togglePasswordVisibility}
-                                className="absolute right-3 top-1/2 transform translate-y-1/4 cursor-pointer text-[var(--accent)]"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 <svg
@@ -232,16 +235,13 @@ const Auth = () => {
                                 >
                                     {showPassword ? (
                                         <>
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675"/>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18"/>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
                                         </>
                                     ) : (
                                         <>
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z"/>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z" />
                                         </>
                                     )}
                                 </svg>
@@ -255,12 +255,9 @@ const Auth = () => {
                                     id="keep-logged-in"
                                     className="h-4 w-4 text-[var(--primary-color)] border-[var(--border-color2)] rounded focus:ring-[var(--primary-color)] cursor-pointer"
                                 />
-                                <label htmlFor="keep-logged-in" className="ml-2 text-[var(--text-1)] cursor-pointer">Keep
-                                    me logged in</label>
+                                <label htmlFor="keep-logged-in" className="ml-2 text-[var(--text-1)] cursor-pointer">Keep me logged in</label>
                             </div>
-                            <Link to="/reset-password"
-                                  className="text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400">Forgot
-                                password?</Link>
+                            <Link to="/reset-password" className="text-[var(--primary-color)] dark:text-[#6D80E7] font-semibold hover:underline transition duration-400">Forgot password?</Link>
                         </div>
 
                         <button
@@ -320,8 +317,7 @@ const Auth = () => {
                             </div>
 
                             <div className="form_grp mb-4 relative">
-                                <label htmlFor="password"
-                                       className="block text-[var(--text-1)] font-semibold mb-2">Password*</label>
+                                <label htmlFor="password" className="block text-[var(--text-1)] font-semibold mb-2">Password*</label>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     id="password"
@@ -335,7 +331,7 @@ const Auth = () => {
                                 <button
                                     type="button"
                                     onClick={togglePasswordVisibility}
-                                    className="absolute right-3 top-1/2 transform translate-y-1/4 cursor-pointer text-[var(--accent)]"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                                 >
                                     <svg
@@ -348,16 +344,13 @@ const Auth = () => {
                                     >
                                         {showPassword ? (
                                             <>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675"/>
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18"/>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
                                             </>
                                         ) : (
                                             <>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z"/>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z" />
                                             </>
                                         )}
                                     </svg>
@@ -365,9 +358,7 @@ const Auth = () => {
                             </div>
 
                             <div className="form_grp mb-4 relative">
-                                <label htmlFor="confirm_password"
-                                       className="block text-[var(--text-1)] font-semibold mb-2">Confirm
-                                    Password*</label>
+                                <label htmlFor="confirm_password" className="block text-[var(--text-1)] font-semibold mb-2">Confirm Password*</label>
                                 <input
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     id="confirm_password"
@@ -381,7 +372,7 @@ const Auth = () => {
                                 <button
                                     type="button"
                                     onClick={toggleConfirmPasswordVisibility}
-                                    className="absolute right-3 top-1/2 transform translate-y-1/4 cursor-pointer text-[var(--accent)]"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                                 >
                                     <svg
@@ -394,16 +385,13 @@ const Auth = () => {
                                     >
                                         {showConfirmPassword ? (
                                             <>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675"/>
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18"/>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.977 9.977 0 012.1-3.675m5.767-2.475A10.05 10.05 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.977 9.977 0 01-2.1 3.675" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
                                             </>
                                         ) : (
                                             <>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z"/>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.472 1.547-1.42 2.92-2.756 4.024A9.957 9.957 0 0112 19c-4.477 0-8.268-2.943-9.542-7z" />
                                             </>
                                         )}
                                     </svg>
@@ -430,8 +418,7 @@ const Auth = () => {
                         </form>
                     </div>
 
-                    <p className="copyright w-full text-[var(--text-3)]">© 2025 Horizon. All Rights Reserved. by
-                        CodeNext IT</p>
+                    <p className="copyright w-full text-[var(--text-3)]">© 2025 Horizon. All Rights Reserved. by CodeNext IT</p>
                 </div>
             </div>
 
@@ -439,7 +426,7 @@ const Auth = () => {
                 className="hidden lg:flex w-1/2 bg-[var(--primary-color)] rounded-bl-[100px] items-center justify-center flex-col p-8 relative">
                 <div
                     className="w-38 h-38 bg-[var(--primary-color)] rounded-full flex items-center justify-center mb-8 shadow-lg">
-                <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M69.0231 186.199H210.362V247.65H69.0231V186.199Z" fill="white" />
                         <path d="M215.278 199.103C215.278 178.894 207.315 159.512 193.14 145.222C178.965 130.932 159.739 122.903 139.693 122.903C119.646 122.903 100.421 130.932 86.2455 145.222C72.0705 159.512 64.107 178.894 64.107 199.103H139.693V199.103H215.278Z" fill="white" />
                         <path fillRule="evenodd" clipRule="evenodd" d="M140 218.153C183.272 218.153 218.351 183.075 218.351 139.803C218.351 96.5306 183.272 61.4517 140 61.4517C96.7278 61.4517 61.6489 96.5306 61.6489 139.803C61.6489 183.075 96.7278 218.153 140 218.153ZM140 279.605C217.211 279.605 279.802 217.013 279.802 139.803C279.802 62.5917 217.211 0 140 0C62.789 0 0.197266 62.5917 0.197266 139.803C0.197266 217.013 62.789 279.605 140 279.605Z" fill="white" />

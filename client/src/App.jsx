@@ -8,26 +8,29 @@ import ResetPassword from './pages/admin/ResetPassword.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import Dashboard from './pages/admin/Dashboard.jsx';
 import { SidebarProvider } from './contexts/SidebarContext.jsx';
+import { AuthProvider } from './contexts/AuthContext.jsx'; // Import AuthProvider
 
 const App = () => {
     return (
-        <SidebarProvider>
-            <Toaster richColors position="top-right" />
-            <Routes>
-                {/* Public Routes */}
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
+        <AuthProvider> {/* Wrap with AuthProvider to provide token context */}
+            <SidebarProvider>
+                <Toaster richColors position="top-right" />
+                <Routes>
+                    {/* Public Routes */}
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
 
-                {/* Protected Routes */}
-                <Route element={<PrivateRoute />}>
-                    <Route path="/" element={<AdminLayout />}>
-                        <Route index element={<Navigate to="/dashboard" replace />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                    {/* Protected Routes */}
+                    <Route element={<PrivateRoute />}>
+                        <Route path="/" element={<AdminLayout />}>
+                            <Route index element={<Navigate to="/dashboard" replace />} />
+                            <Route path="dashboard" element={<Dashboard />} />
+                        </Route>
                     </Route>
-                </Route>
-            </Routes>
-        </SidebarProvider>
+                </Routes>
+            </SidebarProvider>
+        </AuthProvider>
     );
 };
 

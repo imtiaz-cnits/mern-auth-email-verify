@@ -2,8 +2,14 @@ Login Details for Postman
 
 {
 "email": "ia64744@gmail.com",
-"password": "Imtiaz1234"
+"password": "Imtiaz123456"
 }
+
+"email": "imtiaz.cnits01@gmail.com",
+"password": "Imtiaz@1234"
+
+"email": "imtiaz.cnits02@gmail.com",
+"password": "Imtiaz@123456"
 
 "email": "anika.cnits@gmail.com",
 "password": "Anika@1234"

@@ -17,7 +17,7 @@ apiRouter.post("/register", register);
 apiRouter.post("/login", login);
 apiRouter.post("/logout", logout);
 apiRouter.post("/send-verification-otp", AuthMiddleware, sendVerificationOTP);
-apiRouter.post("/verify-account", AuthMiddleware, verifyEmail);
+apiRouter.post("/verify-email", AuthMiddleware, verifyEmail);
 apiRouter.post("/is-auth", isAuthenticated);
 apiRouter.post("/send-reset-otp", sendResetPasswordOTP);
 apiRouter.post("/reset-password", resetPassword);

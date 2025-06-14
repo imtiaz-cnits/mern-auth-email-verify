@@ -3,7 +3,8 @@ import { toast } from 'sonner';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useDarkMode from '../../hooks/useDarkMode';
 import api from '../../api/index.js';
-import { AuthContext } from '../../contexts/AuthContext'; // Import AuthContext
+import { AuthContext } from '../../contexts/AuthContext';
+import Cookies from 'js-cookie';
 
 const Auth = () => {
     const navigate = useNavigate();
@@ -94,15 +95,22 @@ const Auth = () => {
                 password: formData.password,
             });
             if (response.data.success) {
-                setSuccess(response.data.message);
-                toast.success('Registration successful! Please sign in.');
-                setFormData({
-                    name: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: '',
+                const { token } = response.data;
+                if (token && updateToken) {
+                    updateToken(token); // Update AuthContext
+                    Cookies.set('token', token, { expires: 1 }); // Set cookie manually
+                }
+
+                await api.post('/send-verification-otp', {}, {
+                    headers: { 'Authorization': `Bearer ${token}` },
                 });
+
+                setSuccess(response.data.message);
+                toast.success('Registration successful! Please verify your email.');
+
+                setFormData({ name: '', email: '', password: '', confirmPassword: '' });
                 setShowSignup(false);
+                setTimeout(() => navigate('/verify-email'), 1000); // Delay navigation
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Registration failed';
@@ -224,10 +232,11 @@ const Auth = () => {
                                 onClick={togglePasswordVisibility}
                                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                 aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                style={{ paddingTop: '30px' }}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5"
+                                    className="h-5 w-5 "
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -333,6 +342,7 @@ const Auth = () => {
                                     onClick={togglePasswordVisibility}
                                     className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                     aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    style={{ paddingTop: '30px' }}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -374,6 +384,7 @@ const Auth = () => {
                                     onClick={toggleConfirmPasswordVisibility}
                                     className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[var(--accent)]"
                                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                                    style={{ paddingTop: '30px' }}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

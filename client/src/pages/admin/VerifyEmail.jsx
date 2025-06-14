@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDarkMode from '../../hooks/useDarkMode';
 import { toast } from 'sonner';
-import axios from 'axios';
-import { AuthContext } from '../../contexts/AuthContext'; // Import AuthContext
+import api from '../../api/index.js';
+import { AuthContext } from '../../contexts/AuthContext';
+import Cookies from 'js-cookie';
 
 const VerifyEmail = () => {
-    const { token } = useContext(AuthContext); // Access token from context
+    const { updateToken, token: contextToken } = useContext(AuthContext); // Access token from context
     const [dark, setDark] = useDarkMode();
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
@@ -30,60 +31,70 @@ const VerifyEmail = () => {
         setDark(!dark);
     };
 
-    // Function to handle email verification
     const handleVerify = async (e) => {
         e.preventDefault();
         setError('');
 
-        if (!token) {
-            setError('Please log in to verify your email.');
+        // Prefer context token, fallback to cookie
+        const token = contextToken || Cookies.get('token');
+        console.log('Using token:', token, 'From context:', !!contextToken, 'From cookie:', Cookies.get('token'));
+
+        if (!token || token.split('.').length !== 3) {
+            setError('Invalid or missing authentication token. Please sign up again.');
+            console.error('Token validation failed:', { contextToken, cookieToken: Cookies.get('token') });
+            setTimeout(() => navigate('/auth'), 2000);
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:3001/api/verify-account', { otp }, {
+            const response = await api.post('/verify-email', { otp }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token.trim()}`,
                 },
             });
 
             if (response.status === 200) {
+                const { token: newToken } = response.data;
+                if (newToken && updateToken) {
+                    updateToken(newToken);
+                    Cookies.set('token', newToken, { expires: 1 });
+                }
                 toast.success('Email verified successfully!');
                 setTimeout(() => navigate('/dashboard'), 2000);
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || 'Verification failed. Please try again.';
+            console.error('Verification error:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                message: err.message,
+                token: token,
+            });
             setError(errorMessage);
         }
     };
 
-    // Function to handle resending OTP
     const handleResendOtp = async () => {
         setIsResending(true);
         setError('');
 
-        if (!token) {
-            setError('Please log in to resend OTP.');
+        const token = contextToken || Cookies.get('token');
+        console.log('Using token:', token, 'From context:', !!contextToken, 'From cookie:', Cookies.get('token'));
+
+        if (!token || token.split('.').length !== 3) {
+            setError('Invalid or missing authentication token. Please sign up again.');
+            console.error('Token validation failed:', { contextToken, cookieToken: Cookies.get('token') });
             setIsResending(false);
+            setTimeout(() => navigate('/auth'), 2000);
             return;
         }
 
-        // console.log('Sending request with token:', token); // Log the token being sent
-        // console.log('Full Axios config:', {
-        //     method: 'POST',
-        //     url: 'http://localhost:3001/api/send-verification-otp',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${token}`,
-        //     },
-        // });
-
         try {
-            const response = await axios.post('http://localhost:3001/api/send-verification-otp', {}, {
+            const response = await api.post('/send-verification-otp', {}, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token.trim()}`,
                 },
             });
 
@@ -93,8 +104,13 @@ const VerifyEmail = () => {
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || 'Failed to resend OTP. Please try again.';
+            console.error('Resend OTP error:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                message: err.message,
+                token: token,
+            });
             setError(errorMessage);
-            console.error('Resend OTP error:', err.response ? err.response.data : err);
         } finally {
             setIsResending(false);
         }
@@ -123,13 +139,12 @@ const VerifyEmail = () => {
                         </a>
                     </div>
 
-                    {/* Email Verify by OTP Form */}
                     <form className={`w-full dark:text-[var(--text-4)] main-form`} onSubmit={handleVerify}>
                         <h1 className="form_title text-[30px] font-bold text-[var(--text-1)] dark:text-[var(--text-4)]">
                             Email Verification
                         </h1>
                         <p className="text-[var(--text-3)] mb-[20px]">
-                            Enter your otp to verify your email address.
+                            Enter your OTP to verify your email address.
                         </p>
 
                         <div className="form_grp mb-4">
@@ -168,7 +183,6 @@ const VerifyEmail = () => {
                             Verify Now
                         </button>
                     </form>
-                    {/* Email Verify by OTP Form */}
 
                     <p className="copyright w-full text-[var(--text-3)]">
                         © 2025 Horizon. All Rights Reserved. by CodeNext IT
@@ -209,8 +223,7 @@ const VerifyEmail = () => {
                         height="40"
                         viewBox="0 0 280 51"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
+                        xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_402_3008)">
                             <path
                                 d="M255.649 13.6677V28.6195C255.649 31.6293 253.652 33.6358 250.656 33.6358C247.661 33.6358 245.664 31.6293 245.664 28.6195V13.6677H240.504V28.6195C240.504 34.0241 244.565 38.1666 250.656 38.1666C256.747 38.1666 260.808 34.0241 260.808 28.6195V13.6677H255.649ZM264.819 37.7783H269.978V13.6677H264.819V37.7783Z"
